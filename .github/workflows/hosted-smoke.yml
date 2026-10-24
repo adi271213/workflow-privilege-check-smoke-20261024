@@ -1,0 +1,42 @@
+name: Hosted privilege-check smoke
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout trusted base only
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Fetch exact PR head as data
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          [[ "$PR_NUMBER" =~ ^[0-9]+$ ]]
+          [[ "$EXPECTED_HEAD" =~ ^[0-9a-f]{40}$ ]]
+          git fetch --no-tags origin "refs/pull/$PR_NUMBER/head:refs/remotes/origin/smoke-head"
+          test "$(git rev-parse refs/remotes/origin/smoke-head)" = "$EXPECTED_HEAD"
+      - name: Run exact pinned scanner
+        id: scan
+        continue-on-error: true
+        uses: adi271213/workflow-privilege-check-smoke-20261024@743b90ba400ff2a5fe2cd1cfa5b7987363ae0313
+        env:
+          BASH_ENV: ${{ github.workspace }}/trusted-tests/capture-summary.sh
+      - name: Assert hosted outcome and actual summary
+        if: always() && steps.scan.outcome != 'skipped'
+        env:
+          CASE_NAME: ${{ github.head_ref }}
+          SCAN_OUTCOME: ${{ steps.scan.outcome }}
+          EXPECTED_BASE: ${{ github.event.pull_request.base.sha }}
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+          IS_FORK: ${{ github.event.pull_request.head.repo.fork }}
+          SCANNER_COMMIT: 743b90ba400ff2a5fe2cd1cfa5b7987363ae0313
+        run: python3 -I trusted-tests/assert_summary.py
