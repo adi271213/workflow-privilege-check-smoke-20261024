@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "workflow-privilege-check"
+version = "0.1.1"
+description = "Explain supported GitHub Actions privilege changes between two snapshots."
+requires-python = ">=3.11"
+dependencies = ["PyYAML==6.0.3"]
+
+[project.scripts]
+workflow-privilege-check = "privilege_check.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

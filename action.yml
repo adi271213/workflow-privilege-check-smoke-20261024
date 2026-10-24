@@ -1,0 +1,26 @@
+name: Workflow Privilege Check
+description: Report supported GitHub Actions privilege changes between exact commits.
+inputs:
+  base:
+    description: Base commit SHA; defaults to the PR event base SHA.
+    required: false
+  head:
+    description: Head commit SHA; defaults to the PR event head SHA.
+    required: false
+  repository-path:
+    description: Local checkout containing both commit objects.
+    default: .
+  default-permissions:
+    description: Optional trusted JSON map of inherited token defaults.
+    required: false
+runs:
+  using: composite
+  steps:
+    - name: Report workflow privilege changes
+      shell: bash
+      env:
+        PRIVILEGE_BASE: ${{ inputs.base }}
+        PRIVILEGE_HEAD: ${{ inputs.head }}
+        PRIVILEGE_REPOSITORY: ${{ inputs.repository-path }}
+        PRIVILEGE_DEFAULTS: ${{ inputs.default-permissions }}
+      run: bash "$GITHUB_ACTION_PATH/scripts/run-action.sh"

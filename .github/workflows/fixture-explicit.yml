@@ -1,0 +1,8 @@
+name: Explicit fixture
+on: workflow_dispatch
+permissions: {}
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo baseline

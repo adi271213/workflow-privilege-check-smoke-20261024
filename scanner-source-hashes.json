@@ -1,0 +1,8 @@
+{
+  "src/privilege_check/__init__.py": "bb21c6cf98593bfca3d6f3462780c83a40502c0050328980ee5d7af94e40a0d4",
+  "src/privilege_check/sources.py": "d295366b515fdc2b29f43e1c688c9a157c96af3dc837fc69f3b0bf1c96cc4fe2",
+  "src/privilege_check/cli.py": "ef909588de0fa50436e7dd5816bdd0c27c48fb2947756b79475a29e88bc1a893",
+  "src/privilege_check/scan.py": "b95c76427e6872789d7f2358acae568b13e631af33c045794581387d1b6c08e7",
+  "src/privilege_check/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+  "src/privilege_check/report.py": "eafff3ff7e0d6f097b8dce1ca532ba62daf998b642c33d0508d30ca6657e5de5"
+}
