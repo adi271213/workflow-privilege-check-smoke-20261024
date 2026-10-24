@@ -1,8 +1,17 @@
 name: Explicit fixture
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: [never-run-this-fixture-7bb83b]
+    types: [completed]
 permissions: {}
 jobs:
   test:
+    permissions:
+      contents: write
+      id-token: write
+    env:
+      DUMMY_REFERENCE: ${{ secrets.SMOKE_DUMMY_TOKEN }}
     runs-on: ubuntu-latest
     steps:
       - run: echo baseline
